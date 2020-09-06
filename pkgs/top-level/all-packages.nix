@@ -6605,6 +6605,8 @@ in
 
   rename = callPackage ../tools/misc/rename { };
 
+  renamemytvseries = callPackage ../applications/video/renamemytvseries { };
+
   renameutils = callPackage ../tools/misc/renameutils { };
 
   renderdoc = libsForQt5.callPackage ../applications/graphics/renderdoc { };
