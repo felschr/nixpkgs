@@ -6,16 +6,17 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "calibre-web";
-  version = "0.6.18";
+  version = "master-2022-06-18";
 
   src = fetchFromGitHub {
     owner = "janeczku";
     repo = "calibre-web";
-    rev = version;
-    sha256 = "sha256-KjmpFetNhNM5tL34e/Pn1i3hc86JZglubSMsHZWu198=";
+    rev = "07c67b09dbea50f7bcc7a85ac4a5b495128f6091";
+    sha256 = "sha256-3EPfcNRSSCgMgU29dc7WF7+Fr2ce0MonAX2YhGgFRek=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
+    APScheduler
     advocate
     backports_abc
     chardet
