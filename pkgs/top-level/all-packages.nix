@@ -37898,6 +37898,8 @@ with pkgs;
 
   honeytrap = callPackage ../tools/security/honeytrap { };
 
+  keeper-commander = callPackage ../tools/security/keeper-commander { };
+
   kissat = callPackage ../applications/science/logic/kissat { };
 
   tini = callPackage ../applications/virtualization/tini { };
