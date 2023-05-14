@@ -10933,6 +10933,15 @@
     githubId = 6295090;
     name = "Mats";
   };
+  # @TODO
+  myhlamaeus = {
+    # email = "TODO";
+    # matrix = "TODO";
+    github = "Myhlamaeus";
+    githubId = 3647827;
+    # name = "TODO";
+    # keys = []; # TODO
+  };
   mynacol = {
     github = "Mynacol";
     githubId = 26695166;
