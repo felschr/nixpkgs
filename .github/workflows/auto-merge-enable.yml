@@ -16,7 +16,7 @@ jobs:
       contents: write
       pull-requests: write
     name: enable auto merge
-    if: github.repository_owner == 'NixOS' && github.event.pull_request.merged == false && github.event.label.name == 'auto-merge'
+    if: github.event.pull_request.merged == false && github.event.label.name == 'auto-merge'
     runs-on: ubuntu-latest
     steps:
       - name: Check if user is committer
@@ -24,7 +24,8 @@ jobs:
         uses: tspascoal/get-user-teams-membership@v3
         with:
           organization: NixOS
-          team: Nixpkgs Committers
+          team: Nixpkgs Maintainers # TODO testing only
+          # team: Nixpkgs Committers
           username: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} # requires scope read:org
 
