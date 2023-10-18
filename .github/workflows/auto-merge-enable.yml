@@ -13,8 +13,8 @@ permissions:
 jobs:
   auto-merge:
     permissions:
-      contents: write # for devmasx/merge-branch to merge branches
-      pull-requests: write # for peter-evans/create-or-update-comment to create or update comment
+      contents: write
+      pull-requests: write
     name: enable auto merge
     if: github.event.pull_request.merged == false && github.event.label.name == 'auto-merge'
     runs-on: ubuntu-latest
@@ -22,16 +22,18 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Check if user is committer
-        uses: bryantson/check-member-exists-in-team-actions@1.0
+        id: checkAutoMergeUserIsCommitter
+        uses: tspascoal/get-user-teams-membership@v3
         with:
-          team_slug: nixpkgs-committers
-          org_slug: NixOS
-          gh_token: ${{ secrets.GITHUB_TOKEN }}
-          username: ${{ github.event.label.sender }}
+          organization: NixOS
+          team: nixpkgs-committers
+          username: ${{ github.actor }}
+          # username: ${{ github.event.sender.login }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Remove label if user isn't committer
         uses: actions-ecosystem/action-remove-labels@v1
-        if: ${{ failure() }}
+        if: ${{ failure() }} | ${{ steps.checkAutoMergeUserIsCommitter.outputs.isTeamMember == 'false' }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           labels: auto-merge

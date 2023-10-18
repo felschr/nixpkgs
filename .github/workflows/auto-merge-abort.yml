@@ -23,7 +23,6 @@ jobs:
 
       - name: Remove label on new commits
         uses: actions-ecosystem/action-remove-labels@v1
-        if: ${{ startsWith(github.event.comment.body, '/remove-labels') }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           labels: auto-merge
