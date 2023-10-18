@@ -16,7 +16,7 @@ jobs:
       contents: write
       pull-requests: write
     name: enable auto merge
-    if: github.repository_owner == 'NixOS' && github.event.pull_request.merged == false && github.event.label.name == 'auto-merge'
+    if: github.event.pull_request.merged == false && github.event.label.name == 'auto-merge'
     runs-on: ubuntu-latest
     steps:
       - name: Check if user is committer
