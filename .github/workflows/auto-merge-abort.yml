@@ -16,7 +16,7 @@ jobs:
       contents: write # for devmasx/merge-branch to merge branches
       pull-requests: write # for peter-evans/create-or-update-comment to create or update comment
     name: abort auto merge
-    if: github.repository_owner == 'NixOS' && github.event.pull_request.merged == false && contains(github.event.pull_request.labels.*.name, 'auto-merge')
+    if: github.event.pull_request.merged == false && contains(github.event.pull_request.labels.*.name, 'auto-merge')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
