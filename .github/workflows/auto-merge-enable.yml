@@ -1,0 +1,37 @@
+# This action ensures the "auto-merge" label can only by used
+# by Nixpkgs Committers.
+
+name: "enable auto merge"
+
+on:
+  pull_request_target:
+    types: [labeled]
+
+permissions:
+  contents: read
+
+jobs:
+  auto-merge:
+    permissions:
+      contents: write # for devmasx/merge-branch to merge branches
+      pull-requests: write # for peter-evans/create-or-update-comment to create or update comment
+    name: enable auto merge
+    if: github.repository_owner == 'NixOS' && github.event.pull_request.merged == false && github.event.label.name == 'auto-merge'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check if user is committer
+        uses: bryantson/check-member-exists-in-team-actions@1.0
+        with:
+          team_slug: nixpkgs-committers
+          org_slug: NixOS
+          gh_token: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ github.event.label.sender }}
+
+      - name: Remove label if user isn't committer
+        uses: actions-ecosystem/action-remove-labels@v1
+        if: ${{ failure() }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          labels: auto-merge

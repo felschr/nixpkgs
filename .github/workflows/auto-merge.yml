@@ -1,0 +1,45 @@
+# This action merges PRs that are tagged with `auto-merge`
+# once all checks have succeeded.
+
+name: "auto merge"
+
+on:
+  check_run:
+    types: [completed]
+
+permissions:
+  contents: read
+
+jobs:
+  auto-merge:
+    permissions:
+      contents: write # for devmasx/merge-branch to merge branches
+      pull-requests: write # for peter-evans/create-or-update-comment to create or update comment
+    name: auto merge
+    if: github.repository_owner == 'NixOS' && github.event.pull_request.merged == false && contains(github.event.pull_request.labels.*.name, 'auto-merge') && github.event.check_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Make sure all checks have passed
+        uses: arup-group/action-all-checks-passed@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Merge pull request
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.pulls.merge({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            })
+
+      - name: Remove label on failure
+        uses: actions-ecosystem/action-remove-labels@v1
+        if: ${{ failure() }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          labels: auto-merge
