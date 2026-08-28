@@ -5613,6 +5613,13 @@ self: super: with self; {
 
   essent-dynamic-pricing = callPackage ../development/python-modules/essent-dynamic-pricing { };
 
+  essentia = toPythonModule (
+    pkgs.essentia.override {
+      enablePython = true;
+      python3Packages = self;
+    }
+  );
+
   essentials = callPackage ../development/python-modules/essentials { };
 
   essentials-openapi = callPackage ../development/python-modules/essentials-openapi { };
